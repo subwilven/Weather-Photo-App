@@ -23,8 +23,8 @@ data class Clouds (
 )
 
 data class Coord (
-    val lon: Long,
-    val lat: Long
+    val lon: Double,
+    val lat: Double
 )
 
 data class Main (
