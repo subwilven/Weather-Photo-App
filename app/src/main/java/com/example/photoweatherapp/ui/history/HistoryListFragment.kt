@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoweatherapp.R
 import com.example.photoweatherapp.ui.save_image.SaveImageFragment
 import com.example.photoweatherapp.ui.save_image.SaveImageFragment.Companion.BUNDLE_FILE_PATH
 import com.example.photoweatherapp.ui.save_image.SaveImageFragment.Companion.RESULT_IMAGE_SAVED
 import com.example.photoweatherapp.utils.ImagePicker
+import com.example.photoweatherapp.utils.LocationUtils
 import com.example.photoweatherapp.utils.PermissionsManager
 import com.example.photoweatherapp.utils.shareImage
 import kotlinx.android.synthetic.main.fragment_history_list.*
@@ -37,9 +36,16 @@ class HistoryListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mAdapter = ImagesAdapter(mViewModel)
-        requestPermission()
+        requestLocationPermission()
+        requestCameraAndStoragePermission()
         setUpObservers()
         initViews()
+    }
+
+    private fun requestLocationPermission() {
+        LocationUtils.instance?.getUserLocationSingle(this){
+            mViewModel.fetchWeatherData(it)
+        }
     }
 
     private fun setUpObservers() {
@@ -64,7 +70,7 @@ class HistoryListFragment : Fragment() {
         }
     }
 
-    fun requestPermission(onGranted: (() -> Unit)? = null) {
+    fun requestCameraAndStoragePermission(onGranted: (() -> Unit)? = null) {
         PermissionsManager.requestPermission(
             this,
             PermissionsManager.CAMERA,
@@ -76,7 +82,7 @@ class HistoryListFragment : Fragment() {
     }
 
     fun showPickImageDialog() {
-        requestPermission {
+        requestCameraAndStoragePermission {
             ImagePicker.pickImage(this) { imageFile ->
                 navigateToSaveImageFragment(imageFile)
             }

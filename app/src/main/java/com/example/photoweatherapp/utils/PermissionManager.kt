@@ -13,7 +13,7 @@ public object PermissionsManager {
     val CAMERA = Manifest.permission.CAMERA
     val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
     val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
-
+    val COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION
     @SuppressLint("CheckResult")
     fun requestPermission(fragment: Fragment,
                           vararg permissions: String?,

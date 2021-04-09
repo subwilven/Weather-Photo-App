@@ -1,5 +1,6 @@
 package com.example.photoweatherapp.ui.history
 
+import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,14 +19,13 @@ class HistoryViewModel(val repository: Repository) : ViewModel() {
     var weatherData: WeatherModel? = null
 
     init {
-        fetchWeatherData()
         getSavedImagesFile()
     }
 
-    private fun fetchWeatherData() {
+    fun fetchWeatherData(location: Location) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                weatherData = repository.fetchWeatherData()
+                weatherData = repository.fetchWeatherData(location)
             }
         }
     }
