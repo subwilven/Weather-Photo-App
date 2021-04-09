@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoweatherapp.R
 import com.example.photoweatherapp.utils.ImagePicker
@@ -17,6 +18,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HistoryListFragment : Fragment() {
 
     private val mViewModel: HistoryViewModel by viewModel()
+    private val mAdapter = ImagesAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,16 +29,26 @@ class HistoryListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel.text()
+        setUpObservers()
         initViews()
     }
 
+    private fun setUpObservers() {
+        mViewModel.imagesList.observe(viewLifecycleOwner, Observer {
+            mAdapter.setData(it)
+        })
+        mViewModel.onImageAdded.observe(viewLifecycleOwner, Observer {
+            mAdapter.notifyItemInserted(it)
+        })
+    }
 
     private fun initViews() {
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = mAdapter
 
         fab.setOnClickListener {
             ImagePicker.pickImage(this) {
-
+                mViewModel.addImageItem(it)
             }
         }
     }

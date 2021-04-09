@@ -1,5 +1,6 @@
 package com.example.photoweatherapp.ui.history
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.photoweatherapp.data.Repository
@@ -7,16 +8,18 @@ import com.example.photoweatherapp.model.WeatherModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class HistoryViewModel(val repository: Repository) :ViewModel() {
 
+    val imagesList = MutableLiveData<MutableList<File>>(mutableListOf())
+    val onImageAdded = MutableLiveData<Int>()
     var weatherData: WeatherModel? = null
 
     init {
         fetchData()
     }
 
-    fun text(){}
     private fun fetchData() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -24,4 +27,10 @@ class HistoryViewModel(val repository: Repository) :ViewModel() {
             }
         }
     }
+
+    fun addImageItem(file: File) {
+        imagesList.value?.add(file)
+        onImageAdded.value = imagesList.value?.count()
+    }
+
 }
