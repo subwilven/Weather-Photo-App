@@ -1,5 +1,7 @@
 package com.example.photoweatherapp.di
 
+import com.example.photoweatherapp.data.WeatherApis
+import com.example.photoweatherapp.utils.BASE_URL
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -45,10 +47,13 @@ val networkModules = module {
     single {
         Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(get()))
-            .baseUrl("BASE_URL")
+            .baseUrl(BASE_URL)
             .client(get())
             .build()
     }
 
+    single {
+        get<Retrofit>().create(WeatherApis::class.java)
+    }
 
 }
