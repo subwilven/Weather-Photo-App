@@ -79,7 +79,7 @@ fun saveImageToStorage(context: Context,imageBitmap: Bitmap, block: (file: File)
         val timeStamp =
             SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
         val directoryPath =
-            File(context.externalCacheDir, "sharedImages")
+                File(context.externalCacheDir, FILE_SAVE_DIRECTORY)
         directoryPath.mkdir()
         val file = File(directoryPath, "${timeStamp}.png")
         fOut = FileOutputStream(file)

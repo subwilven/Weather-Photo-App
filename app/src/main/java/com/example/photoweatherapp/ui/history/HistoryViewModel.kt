@@ -12,20 +12,25 @@ import java.io.File
 
 class HistoryViewModel(val repository: Repository) :ViewModel() {
 
-    val imagesList = MutableLiveData<MutableList<File>>(mutableListOf())
+    val imagesList = MutableLiveData<MutableList<File>>()
     val onImageAdded = MutableLiveData<Int>()
     var weatherData: WeatherModel? = null
 
     init {
-        fetchData()
+        fetchWeatherData()
+        getSavedImagesFile()
     }
 
-    private fun fetchData() {
+    private fun fetchWeatherData() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 weatherData = repository.fetchWeatherData()
             }
         }
+    }
+
+    private fun getSavedImagesFile(){
+        imagesList.value = repository.getSavedImagesList()
     }
 
     fun addImageItem(file: File) {
