@@ -26,6 +26,7 @@ class SaveImageFragment : Fragment() {
 
         private const val BUNDLE_WEATHER_DATA = "weather-data"
         const val BUNDLE_FILE_PATH = "file-data"
+        const val RESULT_IMAGE_SAVED = "imageSaved"
 
         fun newInstance(weatherModel: WeatherModel, filePath: String): SaveImageFragment {
             val fragment = SaveImageFragment()
@@ -91,7 +92,7 @@ class SaveImageFragment : Fragment() {
                 lifecycleScope.launch(Dispatchers.Main){
                     val bundle  = Bundle()
                     bundle.putString(BUNDLE_FILE_PATH,it.path)
-                    setFragmentResult("imageSaved", bundle)
+                    setFragmentResult(RESULT_IMAGE_SAVED, bundle)
                     activity?.onBackPressed()
                 }
             }
