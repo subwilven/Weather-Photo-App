@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.photoweatherapp.data.Repository
 import com.example.photoweatherapp.model.WeatherModel
+import com.example.photoweatherapp.utils.SingleLiveEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -14,8 +15,10 @@ import java.io.File
 class HistoryViewModel(val repository: Repository) : ViewModel() {
 
     val imagesList = MutableLiveData<MutableList<File>>()
-    val onImageAdded = MutableLiveData<Int>()
-    val onImageClicked = MutableLiveData<File>()
+    val onImageAdded = SingleLiveEvent<Int>()
+    val onImageClicked = SingleLiveEvent<File>()
+    val navigateToFullScreen = SingleLiveEvent<File>()
+
     var weatherData: WeatherModel? = null
 
     init {
@@ -23,6 +26,7 @@ class HistoryViewModel(val repository: Repository) : ViewModel() {
     }
 
     fun fetchWeatherData(location: Location) {
+        if (weatherData != null) return
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 weatherData = repository.fetchWeatherData(location)
@@ -45,6 +49,10 @@ class HistoryViewModel(val repository: Repository) : ViewModel() {
 
     fun shareImage(file: File) {
         onImageClicked.value = file
+    }
+
+    fun navigateToFullScreen(file: File) {
+        navigateToFullScreen.value = file
     }
 
 }

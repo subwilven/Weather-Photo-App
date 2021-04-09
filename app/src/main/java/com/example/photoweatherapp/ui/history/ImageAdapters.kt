@@ -43,7 +43,7 @@ class ImagesAdapter(val historyViewModel: HistoryViewModel) : RecyclerView.Adapt
 
         init {
             itemView.setOnClickListener {
-                historyViewModel.shareImage(list[adapterPosition])
+                historyViewModel.navigateToFullScreen(list[adapterPosition])
             }
         }
 

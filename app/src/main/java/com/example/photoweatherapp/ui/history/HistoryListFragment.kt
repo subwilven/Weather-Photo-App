@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoweatherapp.R
+import com.example.photoweatherapp.ui.full_screen_image.FullScreenImageFragment
 import com.example.photoweatherapp.ui.save_image.SaveImageFragment
 import com.example.photoweatherapp.ui.save_image.SaveImageFragment.Companion.BUNDLE_FILE_PATH
 import com.example.photoweatherapp.ui.save_image.SaveImageFragment.Companion.RESULT_IMAGE_SAVED
@@ -59,6 +60,10 @@ class HistoryListFragment : Fragment() {
         mViewModel.onImageClicked.observe(viewLifecycleOwner,{
             shareImage(it,requireContext())
         })
+
+        mViewModel.navigateToFullScreen.observe(viewLifecycleOwner,{
+            navigateToFullScreen(it)
+        })
     }
 
     private fun initViews() {
@@ -87,6 +92,12 @@ class HistoryListFragment : Fragment() {
                 navigateToSaveImageFragment(imageFile)
             }
         }
+    }
+
+    fun navigateToFullScreen(imageFile: File){
+        val fragment = FullScreenImageFragment.newInstance(imageFile.path)
+        activity?.supportFragmentManager?.beginTransaction()?.addToBackStack(null)
+            ?.replace(R.id.fragment_container_view, fragment)?.commit()
     }
 
 
