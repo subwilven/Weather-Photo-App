@@ -33,4 +33,8 @@ class HistoryViewModel(val repository: Repository) :ViewModel() {
         onImageAdded.value = imagesList.value?.count()
     }
 
+    fun getWeatherDataInfo():WeatherModel?{
+        return weatherData
+    }
+
 }

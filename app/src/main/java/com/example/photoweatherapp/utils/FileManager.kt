@@ -2,9 +2,17 @@ package com.example.photoweatherapp.utils
 
 import android.content.ContentUris
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import androidx.core.content.FileProvider
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun Uri.getFilePathFromURI(context: Context): String? {
     var filePath: String? = null
@@ -48,4 +56,46 @@ private fun getPath(uri: Uri, selection: String?, context: Context): String {
     }
 
     return path ?: ""
+}
+
+
+fun shareImage(file: File, context: Context) {
+    val shareIntent = Intent(Intent.ACTION_SEND)
+        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        .putExtra(
+            Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                context,
+                context.applicationContext.applicationInfo.processName, //(use your app signature + ".provider" )
+                file
+            )
+        )
+        .setType("image/png")
+    context.startActivity(Intent.createChooser(shareIntent, "Share image"))
+}
+
+fun saveImageToStorage(context: Context,imageBitmap: Bitmap, block: (file: File) -> Unit) {
+    var fOut: FileOutputStream? = null
+    try {
+        val timeStamp =
+            SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
+        val directoryPath =
+            File(context.externalCacheDir, "sharedImages")
+        directoryPath.mkdir()
+        val file = File(directoryPath, "${timeStamp}.png")
+        fOut = FileOutputStream(file)
+        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut)
+        //start Intent
+        block.invoke(file)
+
+      //  file.deleteOnExit()
+    } catch (e: Exception) {
+        e.printStackTrace()
+    } finally {
+        try {
+            fOut?.flush()
+            fOut?.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
 }

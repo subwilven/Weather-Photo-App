@@ -1,16 +1,20 @@
 package com.example.photoweatherapp.ui.history
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoweatherapp.R
+import com.example.photoweatherapp.ui.save_image.SaveImageFragment
+import com.example.photoweatherapp.ui.save_image.SaveImageFragment.Companion.BUNDLE_FILE_PATH
 import com.example.photoweatherapp.utils.ImagePicker
 import kotlinx.android.synthetic.main.fragment_history_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -29,6 +33,8 @@ class HistoryListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Toast.makeText(requireContext(), "Please allow permissions manually", Toast.LENGTH_LONG)
+            .show()
         setUpObservers()
         initViews()
     }
@@ -47,8 +53,28 @@ class HistoryListFragment : Fragment() {
         recyclerView.adapter = mAdapter
 
         fab.setOnClickListener {
-            ImagePicker.pickImage(this) {
-                mViewModel.addImageItem(it)
+            ImagePicker.pickImage(this) { imageFile ->
+                navigateToSaveImageFragment(imageFile)
+            }
+        }
+    }
+
+    fun navigateToSaveImageFragment(imageFile: File) {
+        mViewModel.getWeatherDataInfo()?.let { weatherDetails ->
+            val fragment = SaveImageFragment.newInstance(weatherDetails, imageFile.path)
+
+            activity?.supportFragmentManager?.beginTransaction()?.addToBackStack(null)
+                ?.add(R.id.fragment_container_view, fragment)?.commit()
+
+            activity?.supportFragmentManager?.setFragmentResultListener(
+                "imageSaved",
+                viewLifecycleOwner
+            )
+            { key, bundle ->
+                if (key == "imageSaved") {
+                    val filePath = bundle.getString(BUNDLE_FILE_PATH)?:""
+                    mViewModel.addImageItem(File(filePath))
+                }
             }
         }
     }
