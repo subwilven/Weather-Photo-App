@@ -14,6 +14,7 @@ import com.example.photoweatherapp.ui.save_image.SaveImageFragment.Companion.BUN
 import com.example.photoweatherapp.ui.save_image.SaveImageFragment.Companion.RESULT_IMAGE_SAVED
 import com.example.photoweatherapp.utils.ImagePicker
 import com.example.photoweatherapp.utils.PermissionsManager
+import com.example.photoweatherapp.utils.shareImage
 import kotlinx.android.synthetic.main.fragment_history_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
@@ -24,7 +25,7 @@ import java.io.File
 class HistoryListFragment : Fragment() {
 
     private val mViewModel: HistoryViewModel by viewModel()
-    private val mAdapter = ImagesAdapter()
+    private lateinit var mAdapter : ImagesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,17 +36,22 @@ class HistoryListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mAdapter = ImagesAdapter(mViewModel)
         requestPermission()
         setUpObservers()
         initViews()
     }
 
     private fun setUpObservers() {
-        mViewModel.imagesList.observe(viewLifecycleOwner, Observer {
+        mViewModel.imagesList.observe(viewLifecycleOwner, {
             mAdapter.setData(it)
         })
-        mViewModel.onImageAdded.observe(viewLifecycleOwner, Observer {
+        mViewModel.onImageAdded.observe(viewLifecycleOwner, {
             mAdapter.notifyItemInserted(it)
+        })
+
+        mViewModel.onImageClicked.observe(viewLifecycleOwner,{
+            shareImage(it,requireContext())
         })
     }
 

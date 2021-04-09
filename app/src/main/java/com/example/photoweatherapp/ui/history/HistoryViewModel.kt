@@ -10,10 +10,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class HistoryViewModel(val repository: Repository) :ViewModel() {
+class HistoryViewModel(val repository: Repository) : ViewModel() {
 
     val imagesList = MutableLiveData<MutableList<File>>()
     val onImageAdded = MutableLiveData<Int>()
+    val onImageClicked = MutableLiveData<File>()
     var weatherData: WeatherModel? = null
 
     init {
@@ -29,7 +30,7 @@ class HistoryViewModel(val repository: Repository) :ViewModel() {
         }
     }
 
-    private fun getSavedImagesFile(){
+    private fun getSavedImagesFile() {
         imagesList.value = repository.getSavedImagesList()
     }
 
@@ -38,8 +39,12 @@ class HistoryViewModel(val repository: Repository) :ViewModel() {
         onImageAdded.value = imagesList.value?.count()
     }
 
-    fun getWeatherDataInfo():WeatherModel?{
+    fun getWeatherDataInfo(): WeatherModel? {
         return weatherData
+    }
+
+    fun shareImage(file: File) {
+        onImageClicked.value = file
     }
 
 }

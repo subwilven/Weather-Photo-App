@@ -8,6 +8,7 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
+import com.example.photoweatherapp.BuildConfig
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -65,7 +66,7 @@ fun shareImage(file: File, context: Context) {
         .putExtra(
             Intent.EXTRA_STREAM, FileProvider.getUriForFile(
                 context,
-                context.applicationContext.applicationInfo.processName, //(use your app signature + ".provider" )
+                BuildConfig.APPLICATION_ID + ".provider", //(use your app signature + ".provider" )
                 file
             )
         )

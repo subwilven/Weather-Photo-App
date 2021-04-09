@@ -10,7 +10,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_history.*
 import java.io.File
 
-class ImagesAdapter : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
+class ImagesAdapter(val historyViewModel: HistoryViewModel) : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
 
     var list: MutableList<File> = mutableListOf()
 
@@ -40,6 +40,12 @@ class ImagesAdapter : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
 
     inner class ImagesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         LayoutContainer {
+
+        init {
+            itemView.setOnClickListener {
+                historyViewModel.shareImage(list[adapterPosition])
+            }
+        }
 
         fun bind(file: File) {
             Picasso.get().load(file).into(imageView)
