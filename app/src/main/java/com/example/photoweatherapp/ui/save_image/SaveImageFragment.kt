@@ -1,5 +1,6 @@
 package com.example.photoweatherapp.ui.save_image
 
+import android.app.ProgressDialog
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
@@ -54,7 +55,7 @@ class SaveImageFragment : Fragment() {
 
         bindData(weatherModel, filePath)
         btn_save.setOnClickListener {
-            saveImage()
+            saveImageWithBanner()
         }
         btn_cancel.setOnClickListener {
             activity?.onBackPressed()
@@ -75,9 +76,10 @@ class SaveImageFragment : Fragment() {
     }
 
 
-    fun saveImage() {
+    private fun saveImageWithBanner() {
+        val progressDialog = ProgressDialog(requireContext())
+        progressDialog.show()
         lifecycleScope.launch(Dispatchers.Default) {
-
             val imageBitmap = Bitmap.createBitmap(
                 image_Details.width,
                 image_Details.height,
@@ -87,6 +89,7 @@ class SaveImageFragment : Fragment() {
             image_Details?.draw(canvas)
             saveImageToStorage(requireContext(), imageBitmap) {
                 lifecycleScope.launch(Dispatchers.Main){
+                    progressDialog.dismiss()
                     val bundle  = Bundle()
                     bundle.putString(BUNDLE_FILE_PATH,it.path)
                     setFragmentResult(RESULT_IMAGE_SAVED, bundle)
