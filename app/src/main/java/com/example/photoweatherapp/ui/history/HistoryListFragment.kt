@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,7 +46,9 @@ class HistoryListFragment : Fragment() {
     }
 
     private fun requestLocationPermission() {
-        LocationUtils.instance?.getUserLocationSingle(this){
+        LocationUtils.instance?.getUserLocationSingle(this,onFailed = {
+            Toast.makeText(requireContext(),"Failed to get ur location",Toast.LENGTH_LONG)
+        }){
             mViewModel.fetchWeatherData(it)
         }
     }
@@ -64,6 +67,10 @@ class HistoryListFragment : Fragment() {
 
         mViewModel.navigateToFullScreen.observe(viewLifecycleOwner,{
             navigateToFullScreen(it)
+        })
+
+        mViewModel.showToast.observe(viewLifecycleOwner,{
+            Toast.makeText(requireContext(),it,Toast.LENGTH_SHORT).show()
         })
     }
 
