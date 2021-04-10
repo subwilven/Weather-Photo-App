@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:clickable="true"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/black"
     android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,87 +19,102 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_height="350dp"
+            tools:layout_width="350dp" />
 
 
         <View
             android:id="@+id/view"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:background="@color/transparent"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
             app:layout_constraintEnd_toEndOf="@+id/imageView2"
             app:layout_constraintStart_toStartOf="@+id/imageView2" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tv_status"
             style="@style/MyTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="@+id/view"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/view"
-            tools:text="TextView" />
+            tools:text="tv_status" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tv_max"
             style="@style/MyTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            tools:text="TextView" />
+            android:layout_marginEnd="8dp"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_min"
+            app:layout_constraintTop_toTopOf="@+id/tv_status"
+            tools:text="tv_max" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tv_min"
             style="@style/MyTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
-            tools:text="TextView" />
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_max"
+            app:layout_constraintEnd_toEndOf="@+id/tv_address"
+            tools:text="tv_min" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tv_pressure"
+            style="@style/MyTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_wind_speed"
+            app:layout_constraintStart_toStartOf="@+id/tv_wind_speed"
+            tools:text="tv_pressure" />
+
+        <TextView
+            android:id="@+id/tv_humidity"
+            style="@style/MyTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_pressure"
+            app:layout_constraintStart_toStartOf="@+id/tv_pressure"
+            tools:text="tv_humidity" />
+
+        <TextView
+            android:id="@+id/tv_wind_speed"
+            style="@style/MyTextStyle"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_status"
+            tools:text="tv_wind_speed" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            style="@style/MyTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/view"
-            app:layout_constraintTop_toTopOf="@+id/view" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/textView4"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/textView5"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/textView6"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            android:layout_marginBottom="16dp"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="tv_address" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
     <Button
@@ -108,8 +123,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/white"
         android:text="Save"
+        android:textColor="@color/purple_500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -121,6 +138,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/purple_500"
         android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="@+id/btn_save"
         app:layout_constraintEnd_toStartOf="@+id/btn_save"

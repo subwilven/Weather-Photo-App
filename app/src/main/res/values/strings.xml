@@ -12,4 +12,7 @@
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
     <string name="choose_image_picker">Choose Image Picker</string>
+    <string name="pressure">Pressure: %1$s</string>
+    <string name="humidity">Humidity: %1$s</string>
+    <string name="wind_speed">Wind Speed: %1$s</string>
 </resources>
