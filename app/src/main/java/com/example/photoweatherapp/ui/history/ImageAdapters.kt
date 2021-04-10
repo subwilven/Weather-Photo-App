@@ -45,6 +45,9 @@ class ImagesAdapter(val historyViewModel: HistoryViewModel) : RecyclerView.Adapt
             itemView.setOnClickListener {
                 historyViewModel.navigateToFullScreen(list[adapterPosition])
             }
+            image_share.setOnClickListener {
+                historyViewModel.shareImage(list[adapterPosition])
+            }
         }
 
         fun bind(file: File) {
