@@ -2,6 +2,7 @@ package com.example.photoweatherapp.ui.save_image
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +14,14 @@ import com.example.photoweatherapp.R
 import com.example.photoweatherapp.model.WeatherModel
 import com.example.photoweatherapp.utils.saveImageToStorage
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.fragment_save_image.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.lang.Exception
 
 class SaveImageFragment : Fragment() {
 
