@@ -2,7 +2,6 @@ package com.example.photoweatherapp.utils
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -15,10 +14,7 @@ import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.example.photoweatherapp.R
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -49,10 +45,13 @@ object ImagePicker : LifecycleObserver {
         bundle.putString(MESSAGE, fragment.getString(R.string.choose_image_picker))
         imageFragment.arguments = bundle
 
-        launchImagePickerFragment(fragment,imageFragment)
+        launchImagePickerFragment(fragment, imageFragment)
     }
 
-    private fun launchImagePickerFragment(currentFragment: Fragment,pickerFragment: ImagePickerFragment) {
+    private fun launchImagePickerFragment(
+        currentFragment: Fragment,
+        pickerFragment: ImagePickerFragment
+    ) {
         val previousFragment =
             currentFragment.childFragmentManager.findFragmentByTag(ImagePickerFragment.fragmentTag)
         if (previousFragment != null) {
@@ -77,6 +76,8 @@ object ImagePicker : LifecycleObserver {
             val fragmentTag = "ImagePickerFragment"
         }
 
+        var currentPhotoPath = ""
+
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             val title = arguments?.getString(DIALOG_TITLE) ?: ""
@@ -94,11 +95,14 @@ object ImagePicker : LifecycleObserver {
                 galleryResultLauncher.launch(galleryIntent)
             }
             onCameraPermissionGranted = {
+                val photoFile: File = createImageFile(requireContext())
+                currentPhotoPath =photoFile.absolutePath
+                val photoURI: Uri = getUriFromFile(requireContext(), photoFile)
                 val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                val bundle = Bundle()
-                cameraIntent.putExtras(bundle)
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 cameraResultLauncher.launch(cameraIntent)
             }
+
             val galleryButton: ((MaterialDialog) -> Unit) = {
                 it.dismiss()
                 onGalleryPermissionGranted.invoke()
@@ -111,10 +115,12 @@ object ImagePicker : LifecycleObserver {
             val dialog = MaterialDialog(requireContext(), BottomSheet((LayoutMode.WRAP_CONTENT)))
             dialog.title(text = title)
                 .message(text = message)
-                .positiveButton(R.string.gallery) {
+                .positiveButton(R.string.gallery)
+                {
                     galleryButton.invoke(it)
                 }
-                .negativeButton(R.string.camera) { cameraButton.invoke(it) }
+                .negativeButton(R.string.camera)
+                { cameraButton.invoke(it) }
                 .create()
             dialog.show()
         }
@@ -124,16 +130,7 @@ object ImagePicker : LifecycleObserver {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 when (it.resultCode) {
                     Activity.RESULT_OK -> {
-                        val data = it.data?.extras
-                        val sourceImage = data?.get("data") as Bitmap
-                        val byteArray = ByteArrayOutputStream()
-                        sourceImage.compress(
-                            Bitmap.CompressFormat.PNG,
-                            100,
-                            byteArray
-                        )
-                        val file = saveCaptureImageToStorage(byteArray.toByteArray())
-                        onPicked?.invoke(file)
+                        onPicked?.invoke(File(currentPhotoPath))
                     }
                     else -> {
                         onFailed?.invoke()
@@ -175,23 +172,8 @@ object ImagePicker : LifecycleObserver {
                 removeCurrentFragment()
             }
 
-        private fun saveCaptureImageToStorage(byteArray: ByteArray): File {
-            val currentDate = SimpleDateFormat("yyyMMddHHmmss", Locale.ENGLISH).format(Date())
-            val imageFile =
-                File("${context?.externalCacheDir}/CashCall/Profile Images")
-            if (!imageFile.exists())
-                imageFile.mkdirs()
-
-            // bitmap.
-            val file = File("$imageFile" + File.separator + "IMAG_${currentDate}.png")
-            file.createNewFile()
-            val fos = FileOutputStream(file)
-            fos.write(byteArray)
-
-            fos.close()
-            return file
-        }
     }
+
 
 }
 

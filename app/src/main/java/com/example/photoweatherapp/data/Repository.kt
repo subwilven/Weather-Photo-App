@@ -13,7 +13,7 @@ class Repository(private val weatherApis: WeatherApis) {
 
 
     fun getSavedImagesList(): MutableList<File> {
-        return File(MyApplication.instance!!.externalCacheDir, FILE_SAVE_DIRECTORY).listFiles()
+        return MyApplication.instance!!.getExternalFilesDir(FILE_SAVE_DIRECTORY)?.listFiles()
             ?.toMutableList() ?: mutableListOf()
     }
 }

@@ -1,7 +1,5 @@
 package com.example.photoweatherapp.ui.full_screen_image
 
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,13 +8,10 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.photoweatherapp.R
-import com.example.photoweatherapp.model.WeatherModel
 import com.example.photoweatherapp.ui.save_image.SaveImageFragment.Companion.BUNDLE_FILE_PATH
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.fragment_full_screen.*
 import java.io.File
-import java.lang.Exception
 
 class FullScreenImageFragment :Fragment() {
 
