@@ -10,6 +10,7 @@ interface WeatherApis {
     suspend fun fetchWeather(
         @Query("lat") lat: String,
         @Query("lon") lon: String,
+        @Query("units") units: String,
         @Query("appid") apiKey: String
     ): WeatherModel
 }

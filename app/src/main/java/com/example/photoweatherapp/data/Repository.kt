@@ -9,7 +9,12 @@ import java.io.File
 class Repository(private val weatherApis: WeatherApis) {
 
     suspend fun fetchWeatherData(location: Location) =
-        weatherApis.fetchWeather(location.latitude.toString(), location.longitude.toString(), API_KEY)
+        weatherApis.fetchWeather(
+            location.latitude.toString(),
+            location.longitude.toString(),
+            "metric",
+            API_KEY
+        )
 
 
     fun getSavedImagesList(): MutableList<File> {
