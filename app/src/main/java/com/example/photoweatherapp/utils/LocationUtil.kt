@@ -48,6 +48,7 @@ public class LocationUtils : LifecycleObserver {
         initfusedClient()
     }
 
+    @SuppressLint("MissingPermission")
     fun initfusedClient() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(fragment!!.requireContext())
         createLocationRequest()
@@ -61,9 +62,19 @@ public class LocationUtils : LifecycleObserver {
             if (singleRequest) release()
         }
 
+        @SuppressLint("MissingPermission")
         override fun onLocationAvailability(locationAvailability: LocationAvailability?) {
             super.onLocationAvailability(locationAvailability)
-            locationAvailability?.isLocationAvailable?.run { onFailed?.invoke() }
+            if(locationAvailability?.isLocationAvailable== true){
+                mFusedLocationClient?.lastLocation?.addOnSuccessListener { location : Location? ->
+                    location?.let {
+                        onLocation?.invoke(it)
+                    }
+
+                    }
+            }else{
+                onFailed?.invoke()
+            }
         }
     }
 
@@ -86,30 +97,13 @@ public class LocationUtils : LifecycleObserver {
     }
 
 
-    fun checkPermissionAndStartTrack() {
-        //by adding this observer requestLocationPermission() method will be called
-        fragment?.lifecycle?.addObserver(this)
-    }
-
     @SuppressLint("MissingPermission")
-    private fun startTracking() {
-        //remove all callbacks if exist so preventing to have more than one on location change updates
-        mFusedLocationClient!!.removeLocationUpdates(mLocationCallback)
-        mFusedLocationClient!!.requestLocationUpdates(locationRequest, mLocationCallback, null)
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun requestLocationPermission() {
+    fun checkPermissionAndStartTrack() {
         PermissionsManager.requestPermission(fragment!!,COARSE_LOCATION){
-            startTracking()
+            mFusedLocationClient!!.removeLocationUpdates(mLocationCallback)
+            mFusedLocationClient!!.requestLocationUpdates(locationRequest, mLocationCallback, null)
         }
     }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun stopLocationUpdates() {
-        mFusedLocationClient?.removeLocationUpdates(mLocationCallback)
-    }
-
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun release() {
         fragment?.lifecycle?.removeObserver(this)
