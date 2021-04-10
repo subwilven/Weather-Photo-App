@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoweatherapp.R
 import com.example.photoweatherapp.ui.full_screen_image.FullScreenImageFragment
@@ -67,7 +68,7 @@ class HistoryListFragment : Fragment() {
     }
 
     private fun initViews() {
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = GridLayoutManager(requireContext(),2)
         recyclerView.adapter = mAdapter
 
         fab.setOnClickListener {
