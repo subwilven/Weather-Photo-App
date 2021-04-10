@@ -7,30 +7,11 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class WeatherModel (
-    val coord: Coord,
     val weather: List<Weather>,
-    val base: String,
     val main: Main,
-    val visibility: Long,
     val wind: Wind,
-    val clouds: Clouds,
-    val dt: Long,
-    val sys: Sys,
     val timezone: Long,
-    val id: Long,
     val name: String,
-    val cod: Long
-): Parcelable
-
-@Parcelize
-data class Clouds (
-    val all: Long
-): Parcelable
-
-@Parcelize
-data class Coord (
-    val lon: Double,
-    val lat: Double
 ): Parcelable
 
 @Parcelize
@@ -48,15 +29,6 @@ data class Main (
 
     val pressure: Long,
     val humidity: Long
-): Parcelable
-
-@Parcelize
-data class Sys (
-    val type: Long,
-    val id: Long,
-    val country: String,
-    val sunrise: Long,
-    val sunset: Long
 ): Parcelable
 
 @Parcelize
