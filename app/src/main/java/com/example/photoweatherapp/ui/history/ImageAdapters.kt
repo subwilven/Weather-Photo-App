@@ -51,7 +51,7 @@ class ImagesAdapter(val historyViewModel: HistoryViewModel) : RecyclerView.Adapt
         }
 
         fun bind(file: File) {
-            Picasso.get().load(file).into(imageView)
+            Picasso.get().load(file).fit().centerCrop().into(imageView)
         }
 
         override val containerView: View
